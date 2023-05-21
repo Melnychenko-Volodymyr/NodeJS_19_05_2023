@@ -35,10 +35,9 @@ router.get('/author', (req, res) => {
     res.json(authors);
 });
 
-// отримання нового автора, додавання в масив і відправка у відповідь оновленого масиву
-router.post('/add_author', (req, res) => {
-    authors.push(req.body);
-    res.json(authors);
+// отримання масиву авторів від браузера
+router.post('/update_authors', (req, res) => {
+    authors = req.body;
   });
 
 // ------------------------------------------------------------
@@ -52,5 +51,14 @@ router.post('/add_article', (req, res) => {
     articles.push(data);
     res.json(articles);
   });
+
+// обробка масиву статей при зміні автора
+router.post('/change', (req, res) => {
+    console.log(req.body);
+    const change = req.body;
+    for (let i=0; i<articles.length; i++) {
+        if (articles[i].author === change.old) articles[i].author = change.new;
+    }
+  }); 
 
 module.exports = router;
