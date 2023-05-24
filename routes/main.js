@@ -7,10 +7,11 @@ router.get('/', (req, res) => {
 });
 
 let articles = [
-    { author: 'Автор 1', title: 'Заголовок 1', text: 'Це текст статті №1'},
-    { author: 'Автор 1', title: 'Заголовок 2', text: 'Це текст статті №2'},
-    { author: 'Автор 2', title: 'Заголовок 3', text: 'Це текст статті №3'},
-    { author: 'Автор 3', title: 'Заголовок 4', text: 'Це текст статті №4'}
+    { id_article: 1, id_author: 1, title: 'Заголовок 1', text: 'Це текст статті №1'},
+    { id_article: 2, id_author: 1, title: 'Заголовок 2', text: 'Це текст статті №2'},
+    { id_article: 3, id_author: 2, title: 'Заголовок 3', text: 'Це текст статті №3'},
+    { id_article: 4, id_author: 2, title: 'Заголовок 4', text: 'Це текст статті №4'},
+    { id_article: 5, id_author: 3, title: 'Заголовок 5', text: 'Це текст статті №5'}
 ];
 
 // відправка масиву статей на запит get
@@ -25,9 +26,9 @@ router.get('/add_author/', (req, res) => {
 });
 
 let authors = [
-    { author: 'Автор 1'},
-    { author: 'Автор 2'},
-    { author: 'Автор 3'}
+    { id_author: 1, author: 'Автор 1'},
+    { id_author: 2, author: 'Автор 2'},
+    { id_author: 3, author: 'Автор 3'}
 ]
 
 // відправка масиву авторів на запит get
@@ -46,19 +47,9 @@ router.get('/add_article/', (req, res) => {
     res.render('add_article');
 });  
 // отримання нової статті, додавання її в масив і відправка у відповідь оновленого масиву
-router.post('/add_article', (req, res) => {
-    const data = req.body;
-    articles.push(data);
-    res.json(articles);
+router.post('/update_articles', (req, res) => {
+    articles = req.body;
   });
 
-// обробка масиву статей при зміні автора
-router.post('/change', (req, res) => {
-    console.log(req.body);
-    const change = req.body;
-    for (let i=0; i<articles.length; i++) {
-        if (articles[i].author === change.old) articles[i].author = change.new;
-    }
-  }); 
 
 module.exports = router;

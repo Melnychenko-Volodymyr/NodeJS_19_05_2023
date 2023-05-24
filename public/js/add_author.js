@@ -12,14 +12,17 @@ let author = {};
 let change = {};
 let oldAuthor = '';
 let newAuthor = '';
+let lastIdAuthor = 0;
 
 // відображення списку авторів і формування списку select
 const render = () => {
 	contHTML = "";
 	selectHTML = '';
+	lastIdAuthor = 0;
 	for (let i=0; i<authors.length; i++) {
-		contHTML += `<p class="author">${authors[i].author}</p>`;
-		selectHTML += `<option value='${authors[i].author}'>${authors[i].author}</option>`
+		if (authors[i].id_author > lastIdAuthor) lastIdAuthor = authors[i].id_author;
+		contHTML += `<p class="author">${authors[i].id_author}  ${authors[i].author}</p>`;
+		selectHTML += `<option value='${authors[i].id_author} ${authors[i].author}'>${authors[i].id_author} ${authors[i].author}</option>`
 	}
 	cont.innerHTML = contHTML;
 	select.innerHTML = selectHTML;
@@ -43,20 +46,11 @@ const sendAuthors = async () =>  {
 	}
   };
 
-// відправка  даних про зміну автора  для оновлення масиву статей на сервері 
-const changeAuthors = async () =>  {
-	  try {
-		const res = await axios.post('/change', change);
-	  } catch (error) {
-		console.error(error); // Обробка помилок
-	  }
-	  	
-  };
-
-
 // обробка натискання кнопки для додавання автора 
   button.addEventListener('click', (ev) => {
+	author = {id_author: 0, author: ""};
 	author.author = input.value;
+	author.id_author = lastIdAuthor + 1;
 	if (author.author) {
 		input.value = '';
 		authors.push(author);
@@ -68,18 +62,16 @@ const changeAuthors = async () =>  {
 
 // обробка натискання кнопки для коригування автора 
 button1.addEventListener('click', (ev) => {
-	oldAuthor = select.value;
+	let n = parseInt(select.value,10);
+	console.log(select.value,n);
 	newAuthor = input1.value;
 	if (newAuthor) {
 		input1.value = '';
 		for (let i=0; i<authors.length; i++) {
-			if (oldAuthor === authors[i].author) authors[i].author = newAuthor;
+			if (n === authors[i].id_author) authors[i].author = newAuthor;
 		}
-		change.old = oldAuthor;
-		change.new = newAuthor;
 		render();
-		sendAuthors();
-		changeAuthors();		
+		sendAuthors();		
 	}
   }
   );
